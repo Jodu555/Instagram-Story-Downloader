@@ -44,10 +44,6 @@ exports.donwloadStory = async (username) => {
     });
 }
 
-// async function donwloadStory(username) {
-
-// }
-
 async function downloadAndMove(username, src, filename, id) {
     await download(src, '', './').then(async (output) => {
         fs.rename(output, fm.getUserDirectory(username) + '/' + filename, function (err) {
@@ -94,7 +90,6 @@ exports.getUserID = async (username) => {
         .then(res => res.json())
         .then(json => {
             if (json.status == 'fail') {
-                console.log(json);
                 console.log('Failed to get User-ID: ' + username);
                 if (json.spam)
                     console.log('Maybe cause by API spamming!');

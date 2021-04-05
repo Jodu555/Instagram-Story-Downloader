@@ -28,7 +28,6 @@ app.get('/download/:username', async (req, res) => {
     const username = req.params.username;
     console.log('Donwloading Story of ' + username);
     var obj = await downloader.donwloadStory(username);
-    console.log(obj);
     res.json(obj);
 });
 
