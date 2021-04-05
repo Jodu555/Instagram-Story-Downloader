@@ -2,6 +2,24 @@
 const fs = require('fs');
 
 var currentDir = '';
+
+exports.updateCacheFile = (userID) => {
+    let data = JSON.stringify(userID);
+    fs.writeFileSync('userCache.json', data)
+};
+
+exports.loadCacheFile = () => {
+    try {
+        let data = fs.readFileSync('userCache.json');
+        let cache = JSON.parse(data);
+        return cache;
+    } catch (error) {
+        return {};
+    }
+
+
+};
+
 exports.createDirectory = () => {
     fs.mkdir('./storys', (err) => {
     });
