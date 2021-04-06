@@ -14,6 +14,12 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('tiny'));
 
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Instagram Downloader is working fine! 🤯👌'
+    });
+});
+
 app.get('/cache/:username', (req, res) => {
     const username = req.params.username;
     res.json({
@@ -31,8 +37,10 @@ app.get('/download/:username', async (req, res) => {
     res.json(obj);
 });
 
-app.listen(9090, () => {
-    console.log('Insta-Donwloader listening on 9090');
+const port = 9090
+
+app.listen(port, () => {
+    console.log(`Insta-Donwloader listening on ${port}`);
 });
 
 
