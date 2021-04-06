@@ -16,16 +16,18 @@ const opts = {
 
 const userID = fm.loadCacheFile();
 
+const noStoryOBJ = {
+    success: false,
+    message: 'It seems that the user dont have any storys yet!',
+};
+
 exports.donwloadStory = async (username) => {
     fm.createUserDirectory(username);
     const userID = await this.getUserID(username);
     const elements = await getVideoElements(username, userID);
     if(elements == null || elements.length == 0) {
         console.log('It seems that the user ' + username + ' dont have any storys yet!');
-        return {
-            success: false,
-            message: 'It seems that the user ' + username + ' dont have any storys yet!',
-        }
+        return noStoryOBJ; 
     }
     var id = 0;
     finalId = 0;
@@ -33,6 +35,10 @@ exports.donwloadStory = async (username) => {
         id++;
         if (id % 2) {
             finalId++;
+            if(videoElement == null || videoElement == undefined || videoElement.src == undefined || videoElement.src == null) {
+                console.log('It seems that the user ' + username + ' dont have any storys yet!');
+                return noStoryOBJ;
+            }
             var src = videoElement.src.replace('https', 'http');
             var filename = `${username} Story #${finalId}.mp4`;
             await downloadAndMove(username, src, filename, id);

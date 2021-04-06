@@ -37,7 +37,7 @@ app.get('/download/:username', async (req, res) => {
     res.json(obj);
 });
 
-const port = 9090
+const port = 1769;
 
 app.listen(port, () => {
     console.log(`Insta-Donwloader listening on ${port}`);
