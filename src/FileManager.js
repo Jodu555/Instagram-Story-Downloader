@@ -16,8 +16,6 @@ exports.loadCacheFile = () => {
     } catch (error) {
         return {};
     }
-
-
 };
 
 exports.createDirectory = () => {
@@ -33,11 +31,13 @@ exports.createDirectory = () => {
 }
 
 exports.createUserDirectory = (username) => {
+    createDirectory();
     fs.mkdir(currentDir + "/" + username, (err) => {
 
     });
 }
 
 exports.getUserDirectory = (username) => {
+    createDirectory();
     return currentDir + '/' + username;
 }
