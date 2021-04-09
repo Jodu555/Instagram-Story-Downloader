@@ -31,13 +31,13 @@ exports.createDirectory = () => {
 }
 
 exports.createUserDirectory = (username) => {
-    createDirectory();
+    this.createDirectory();
     fs.mkdir(currentDir + "/" + username, (err) => {
 
     });
 }
 
 exports.getUserDirectory = (username) => {
-    createDirectory();
+    this.createDirectory();
     return currentDir + '/' + username;
 }
