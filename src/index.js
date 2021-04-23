@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const helmet = require('helmet')
+const helmet = require('helmet');
 
 const fm = require('./FileManager.js');
 const downloader = require('./Downloader.js');

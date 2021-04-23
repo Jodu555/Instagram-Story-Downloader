@@ -3,6 +3,14 @@ const fs = require('fs');
 
 var currentDir = '';
 
+//Folder Structure: 
+// eg. /storys/2021/04/23
+// /storys/JAHR/MONAT/DAY
+
+const createDirectoryOptions = {
+    recursive: true
+};
+
 exports.updateCacheFile = (userID) => {
     let data = JSON.stringify(userID);
     fs.writeFileSync('userCache.json', data)
@@ -19,20 +27,26 @@ exports.loadCacheFile = () => {
 };
 
 exports.createDirectory = () => {
-    fs.mkdir('./storys', (err) => {
-    });
     var time = new Date().toLocaleDateString('de').replace('.', '-').replace('.', '-');
-    fs.mkdir("./storys/" + time, (err) => {
+    const splitter = time.split('-');
+    const year = splitter[2];
+    const month = splitter[1];
+    const day = splitter[0];
+    const dir = `./storys/${year}/${month}/${day}`
+    fs.mkdir(dir, createDirectoryOptions, (err) => {
         if (!err) {
-            console.log("Story Directory Successfully Created!")
+            console.log('Story Directory Successfully Created!')
+        } else {
+            console.error(err);
+            console.error('Failed to create Story Directory');
         }
     });
-    currentDir = './storys/' + time;
+    currentDir = dir;
 }
 
 exports.createUserDirectory = (username) => {
     this.createDirectory();
-    fs.mkdir(currentDir + "/" + username, (err) => {
+    fs.mkdir(currentDir + "/" + username, createDirectoryOptions, (err) => {
 
     });
 }
