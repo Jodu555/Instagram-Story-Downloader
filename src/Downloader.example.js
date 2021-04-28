@@ -21,6 +21,10 @@ const noStoryOBJ = {
     message: 'It seems that the user dont have any storys yet!',
 };
 
+exports.downloadReels = async (username) => {
+    
+};
+
 exports.donwloadStory = async (username) => {
     fm.createUserDirectory(username);
     const userID = await this.getUserID(username);
@@ -101,8 +105,12 @@ exports.getUserID = async (username) => {
                     console.log('Maybe cause by API spamming!');
                 exit();
             }
-
-            userid = json.graphql.user.id;
+            try {
+                userid = json.graphql.user.id;
+            } catch (error) {
+                console.log('Error in loading user-id from ' + username + ' maybe the user doesnt exist!');
+            }
+            
         });
 
     userID[username] = userid;
