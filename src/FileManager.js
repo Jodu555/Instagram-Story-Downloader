@@ -1,13 +1,13 @@
-
 const fs = require('fs');
 
-var currentDir = '';
+var currentStoryDir = '';
+var currentReelDir = '';
 
 //Folder Structure: 
 // eg. /storys/2021/04/23
 // /storys/JAHR/MONAT/DAY
 
-const createDirectoryOptions = {
+const directoryOptions = {
     recursive: true
 };
 
@@ -27,31 +27,81 @@ exports.loadCacheFile = () => {
 };
 
 exports.createDirectory = () => {
+    this.createStoryDirectory();
+    this.createReelDirectory();
+}
+
+//Story based methods
+
+exports.createStoryDirectory = () => {
     var time = new Date().toLocaleDateString('de').replace('.', '-').replace('.', '-');
     const splitter = time.split('-');
     const year = splitter[2];
     const month = splitter[1];
     const day = splitter[0];
     const dir = `./storys/${year}/${month}/${day}`
-    fs.mkdir(dir, createDirectoryOptions, (err) => {
+    fs.mkdir(dir, directoryOptions, (err) => {
         if (!err) {
-            console.log('Story Directory Successfully Created!')
+            // console.log('Story Directory Successfully Created!')
         } else {
             console.error(err);
             console.error('Failed to create Story Directory');
         }
     });
-    currentDir = dir;
+    currentStoryDir = dir;
 }
 
-exports.createUserDirectory = (username) => {
-    this.createDirectory();
-    fs.mkdir(currentDir + "/" + username, createDirectoryOptions, (err) => {
+exports.createUserStoryDirectory = (username) => {
+    this.createStoryDirectory();
+    fs.mkdir(currentStoryDir + "/" + username, directoryOptions, (err) => {
 
     });
 }
 
-exports.getUserDirectory = (username) => {
-    this.createDirectory();
-    return currentDir + '/' + username;
+exports.getUserStoryDirectory = (username) => {
+    this.createStoryDirectory();
+    return currentStoryDir + '/' + username;
 }
+
+//Reel based methods
+
+exports.createReelDirectory = () => {
+    const dir = `./reels`
+    fs.mkdir(dir, directoryOptions, (err) => {
+        if (!err) {
+            // console.log('Reel Directory Successfully Created!')
+        } else {
+            console.error(err);
+            console.error('Failed to create Reel Directory');
+        }
+    });
+    currentReelDir = dir;
+}
+
+exports.createUserReelIDDirectory = (username, ID) => {
+    this.createReelDirectory();
+    fs.mkdirSync(`${currentReelDir}/${username}/#${ID}`, directoryOptions, (err) => {
+
+    });
+};
+
+exports.createUserReelDirectory = (username) => {
+    this.createReelDirectory();
+    fs.mkdir(currentReelDir + "/" + username, directoryOptions, (err) => {
+
+    });
+}
+
+exports.rewriteUserReelDirectory = (username) => {
+    fs.rmSync(this.getUserReelDirectory(username), directoryOptions);
+}
+
+exports.getUserReelDirectory = (username) => {
+    this.createReelDirectory();
+    return currentReelDir + '/' + username;
+}
+
+exports.getUserReelIDDirectory = (username, ID) => {
+    this.createReelDirectory();
+    return `${currentReelDir}/${username}/#${ID}`;
+};

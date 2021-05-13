@@ -30,7 +30,7 @@ app.get('/cache/:username', (req, res) => {
     res.status(200);
 });
 
-app.get('/download/:username', async (req, res) => {
+app.get('/download/:username', async(req, res) => {
     const username = req.params.username;
     console.log('Donwloading Story of ' + username);
     var obj = await downloader.donwloadStory(username);
@@ -41,7 +41,8 @@ const port = 1769;
 
 app.listen(port, () => {
     console.log(`Insta-Donwloader listening on ${port}`);
+
+    downloader.downloadReels('alexasearth');
+    // downloader.donwloadStory('timjacken');
+
 });
-
-
-

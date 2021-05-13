@@ -1,24 +1,25 @@
 {
-  "name": "Instagramm-Story-Downloader",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "helmet": "^4.4.1",
-    "morgan": "^1.10.0",
-    "node-fetch": "^2.6.1",
-    "video-downloader": "^1.0.4"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.7"
-  }
+    "name": "Instagramm-Story-Downloader",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon --watch src src/index.js",
+        "start": "node src/index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "async-file-dl": "^0.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^9.0.2",
+        "express": "^4.17.1",
+        "helmet": "^4.4.1",
+        "morgan": "^1.10.0",
+        "node-fetch": "^2.6.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
+    }
 }
