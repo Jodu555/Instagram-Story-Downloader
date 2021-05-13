@@ -35,6 +35,11 @@ const noReelOBJ = {
     message: 'It seems that the user dont have any reels yet!',
 };
 
+const reelOBJ = {
+    success: true,
+    message: 'Reels from user where downloaded!',
+};
+
 exports.downloadImages = async(username) => {
     fetch("https://www.instagram.com/graphql/query/?query_hash=32b14723a678bd4628d70c1f877b94c9&variables=%7B%22id%22%3A%22" + username + "%22%2C%22first%22%3A12%2C%22after%22%3A%22QVFCSnFlTDZEU3kwQ2VQQk1mOUdsRlNXNjc0QjVYajVXYzZtRWU3VVYyckluckx0RDVsTnBZYTZaMS1EREgwRWw3UmIxcGI3QktKVzZ5T2w3MllvOWx6Xw%3D%3D%22%7D", {
         "headers": opts.headers,
@@ -46,32 +51,40 @@ exports.downloadImages = async(username) => {
     });
 }
 
-exports.downloadReels = async(username) => {
+///////////////////////////////////////////////////////////////
+//////////////////////// IG Reels ////////////////////////////
+/////////////////////////////////////////////////////////////
+
+exports.downloadReels = async(username, paging) => {
     let id = 0;
     fm.createUserReelDirectory(username);
     fm.rewriteUserReelDirectory(username)
     const userID = await this.getUserID(username);
-    let reels = await getReelItems(userID, '');
-    console.log(reels.length);
-    // reels.forEach(async(reel) => {
-    //     reel = reel.media;
-    //     id++;
-    //     fm.createUserReelIDDirectory(username, id);
-    //     const src = reel.video_versions[0].url.replace('https', 'http');
-    //     const filename = `Reel ${username} ${id}.mp4`;
-    //     const reelObj = {
-    //         username: reel.caption.user.username,
-    //         fullname: reel.caption.user.full_name,
-    //         profile_picture: reel.caption.user.profile_pic_url,
-    //         text: reel.caption.text,
-    //         view_count: reel.view_count,
-    //         play_count: reel.play_count,
-    //         caption_is_edited: reel.caption_is_edited,
-    //         created_at_ms: reel.caption.created_at * 1000,
-    //     };
-    //     writeReelInfo(username, id, reelObj);
-    //     await downloadAndMoveReel(username, src, filename, id);
-    // });
+    let reels = await getReelItems(userID, '', paging);
+    if (reels == null || reels.length == 0) {
+        console.log('It seems that the user ' + username + ' dont have any reels yet!');
+        return noStoryOBJ;
+    }
+    reels.forEach(async(reel) => {
+        reel = reel.media;
+        id++;
+        fm.createUserReelIDDirectory(username, id);
+        const src = reel.video_versions[0].url.replace('https', 'http');
+        const filename = `Reel ${username} ${id}.mp4`;
+        const reelObj = {
+            username: reel.caption.user.username,
+            fullname: reel.caption.user.full_name,
+            profile_picture: reel.caption.user.profile_pic_url,
+            text: reel.caption.text,
+            view_count: reel.view_count,
+            play_count: reel.play_count,
+            caption_is_edited: reel.caption_is_edited,
+            created_at_ms: reel.caption.created_at * 1000,
+        };
+        writeReelInfo(username, id, reelObj);
+        await downloadAndMoveReel(username, src, filename, id);
+    });
+    return reelOBJ;
 };
 
 function writeReelInfo(username, id, reelObj) {
@@ -99,7 +112,7 @@ async function downloadAndMoveReel(username, src, filename, id) {
         }).catch(console.error);
 }
 
-async function getReelItems(userid, max_id) {
+async function getReelItems(userid, max_id, paging) {
     const reels = [];
     await fetch("https://i.instagram.com/api/v1/clips/user/", {
             "headers": opts.headers,
@@ -113,15 +126,19 @@ async function getReelItems(userid, max_id) {
             json.items.forEach(item => {
                 reels.push(item);
             });
-            // if (json.paging_info.more_available) {
-            //     const newReels = await getReelItems(userid, json.paging_info.max_id);
-            //     newReels.forEach(item => {
-            //         reels.push(item);
-            //     });
-            // }
+            if (json.paging_info.more_available && paging) {
+                const newReels = await getReelItems(userid, json.paging_info.max_id);
+                newReels.forEach(item => {
+                    reels.push(item);
+                });
+            }
         });
     return reels;
 }
+
+////////////////////////////////////////////////////////////////
+//////////////////////// IG Storys ////////////////////////////
+//////////////////////////////////////////////////////////////
 
 exports.donwloadStory = async(username) => {
     fm.createUserStoryDirectory(username);
