@@ -40,16 +40,36 @@ const reelOBJ = {
     message: 'Reels from user where downloaded!',
 };
 
-exports.downloadImages = async(username) => {
-    fetch("https://www.instagram.com/graphql/query/?query_hash=32b14723a678bd4628d70c1f877b94c9&variables=%7B%22id%22%3A%22" + username + "%22%2C%22first%22%3A12%2C%22after%22%3A%22QVFCSnFlTDZEU3kwQ2VQQk1mOUdsRlNXNjc0QjVYajVXYzZtRWU3VVYyckluckx0RDVsTnBZYTZaMS1EREgwRWw3UmIxcGI3QktKVzZ5T2w3MllvOWx6Xw%3D%3D%22%7D", {
-        "headers": opts.headers,
-        "referrer": "https://www.instagram.com/",
-        "referrerPolicy": "strict-origin-when-cross-origin",
-        "body": null,
-        "method": "GET",
-        "mode": "cors"
-    });
-}
+// exports.downloadImages = async(username) => {
+//     const userID = await this.getUserID(username);
+//     fetch("https://www.instagram.com/graphql/query/?query_hash=32b14723a678bd4628d70c1f877b94c9&variables=%7B%22id%22%3A%22" + userID + "%22%2C%22first%22%3A12%2C%22after%22%3A%22QVFCSnFlTDZEU3kwQ2VQQk1mOUdsRlNXNjc0QjVYajVXYzZtRWU3VVYyckluckx0RDVsTnBZYTZaMS1EREgwRWw3UmIxcGI3QktKVzZ5T2w3MllvOWx6Xw%3D%3D%22%7D", {
+//             "headers": opts.headers,
+//             "referrer": "https://www.instagram.com/",
+//             "referrerPolicy": "strict-origin-when-cross-origin",
+//             "body": null,
+//             "method": "GET",
+//             "mode": "cors"
+//         }).then(res => res.json())
+//         .then(async(json) => {
+//             json = json.data.user.edge_owner_to_timeline_media;
+//             const count = json.count;
+//             const edge = json.edges[0].node;
+//             const location = edge.location;
+
+//             console.log(edge);
+
+//             // console.log(edge);
+//             // json.edges.forEach(edge => {
+
+//             // });
+
+//             const page_info = json.page_info;
+//             console.log(page_info);
+//             // if (page_info.has_next_page) {
+//             //     const cursor = page_info.end_cursor;
+//             // }
+//         });
+// }
 
 ///////////////////////////////////////////////////////////////
 //////////////////////// IG Reels ////////////////////////////
