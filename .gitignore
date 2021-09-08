@@ -3,6 +3,7 @@ storys
 reels
 userCache.json
 .env
+.env copy
 
 # Logs
 logs

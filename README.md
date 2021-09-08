@@ -16,6 +16,6 @@ A Fully Configurable Instagram Downloader! To Download Instagram Storys from eve
 
 * Make sure that when you have auth enabled that you specify the auth_token from the .env file in the request headers under token
 
-* Story | Make a simple GET request to the URL http://example.com:9090/download/story/USERNAME and Replace the Username with the account username from instagram you wanna download!
-* Reels | Make a simple GET request to the URL http://example.com:9090/download/reel/USERNAME and Replace the Username with the account username from instagram you wanna download!
+* Story | Make a simple GET request to the URL http://example.com:9090/download/storys/USERNAME and Replace the Username with the account username from instagram you wanna download!
+* Reels | Make a simple GET request to the URL http://example.com:9090/download/reels/USERNAME and Replace the Username with the account username from instagram you wanna download!
 * You can also make a GET request to the URL http://example.com:9090/cache/USERNAME When you only want to cache the userID
