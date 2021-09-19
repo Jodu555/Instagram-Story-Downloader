@@ -75,7 +75,7 @@ const reelOBJ = {
 //////////////////////// IG Reels ////////////////////////////
 /////////////////////////////////////////////////////////////
 
-exports.downloadReels = async(username, paging) => {
+exports.downloadReels = async (username, paging, CODE) => {
     let id = 0;
     fm.createUserReelDirectory(username);
     fm.rewriteUserReelDirectory(username)
@@ -85,9 +85,12 @@ exports.downloadReels = async(username, paging) => {
         console.log('It seems that the user ' + username + ' dont have any reels yet!');
         return noStoryOBJ;
     }
-    reels.forEach(async(reel) => {
+    reels.forEach(async (reel) => {
         reel = reel.media;
         id++;
+        if (CODE && reel.code != CODE)
+            return;
+
         fm.createUserReelIDDirectory(username, id);
         const src = reel.video_versions[0].url.replace('https', 'http');
         const filename = `Reel ${username} ${id}.mp4`;
@@ -122,7 +125,7 @@ function writeReelInfo(username, id, reelObj) {
 async function downloadAndMoveReel(username, src, filename, id) {
     download(src, '.', filename)
         .then(output => {
-            fs.rename(output, fm.getUserReelIDDirectory(username, id) + '/' + filename, function(err) {
+            fs.rename(output, fm.getUserReelIDDirectory(username, id) + '/' + filename, function (err) {
                 if (err) {
                     console.log('ERROR: ' + err);
                     throw err;
@@ -135,14 +138,14 @@ async function downloadAndMoveReel(username, src, filename, id) {
 async function getReelItems(userid, max_id, paging) {
     const reels = [];
     await fetch("https://i.instagram.com/api/v1/clips/user/", {
-            "headers": opts.headers,
-            "referrer": "https://www.instagram.com/",
-            "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": "target_user_id=" + userid + "&page_size=12&max_id=" + max_id,
-            "method": "POST",
-            "mode": "cors"
-        }).then(res => res.json())
-        .then(async(json) => {
+        "headers": opts.headers,
+        "referrer": "https://www.instagram.com/",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": "target_user_id=" + userid + "&page_size=12&max_id=" + max_id,
+        "method": "POST",
+        "mode": "cors"
+    }).then(res => res.json())
+        .then(async (json) => {
             json.items.forEach(item => {
                 reels.push(item);
             });
@@ -160,7 +163,7 @@ async function getReelItems(userid, max_id, paging) {
 //////////////////////// IG Storys ////////////////////////////
 //////////////////////////////////////////////////////////////
 
-exports.donwloadStory = async(username) => {
+exports.donwloadStory = async (username) => {
     fm.createUserStoryDirectory(username);
     const userID = await this.getUserID(username);
     const elements = await getVideoElementsStory(username, userID);
@@ -170,7 +173,7 @@ exports.donwloadStory = async(username) => {
     }
     var id = 0;
     finalId = 0;
-    elements.forEach(async(videoElement) => {
+    elements.forEach(async (videoElement) => {
         id++;
         if (id % 2) {
             finalId++;
@@ -190,8 +193,8 @@ exports.donwloadStory = async(username) => {
 }
 
 async function downloadAndMoveStory(username, src, filename) {
-    await download(src, '.', filename).then(async(output) => {
-        fs.rename(output, fm.getUserStoryDirectory(username) + '/' + filename, function(err) {
+    await download(src, '.', filename).then(async (output) => {
+        fs.rename(output, fm.getUserStoryDirectory(username) + '/' + filename, function (err) {
             if (err) {
                 console.log('ERROR: ' + err);
                 throw err;
@@ -225,7 +228,7 @@ async function getVideoElementsStory(username, userID) {
     return elements
 }
 
-exports.getUserID = async(username) => {
+exports.getUserID = async (username) => {
     let userid = 0;
     if (userID[username]) {
         console.log('User-ID of ' + username + " have already been cached!");

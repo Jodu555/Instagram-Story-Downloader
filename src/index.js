@@ -68,8 +68,16 @@ app.get('/download/reels/:username', async (req, res) => {
     res.json(obj);
 });
 
+app.get('/download/reels/:username/:code', async (req, res) => {
+    const { username, code } = req.params;
+    console.log('Donwloading Reels of ' + username);
+    var obj = await downloader.downloadReels(username, true, code);
+    res.json(obj);
+});
+
 const port = process.env.PORT || 1769;
 
 app.listen(port, () => {
     console.log(`Insta-Donwloader listening on ${port}`);
+    // downloader.downloadReels('briskycoders', true, 'CTpg346hsDz');
 });
