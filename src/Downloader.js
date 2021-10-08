@@ -175,19 +175,17 @@ exports.donwloadStory = async (username) => {
     finalId = 0;
     elements.forEach(async (videoElement) => {
         id++;
-        if (id % 2) {
-            finalId++;
-            if (videoElement == null || videoElement == undefined || videoElement.src == undefined || videoElement.src == null) {
-                console.log('It seems that the user ' + username + ' dont have any storys yet!');
-                return noStoryOBJ;
-            }
-            var src = videoElement.src.replace('https', 'http');
-            var filename = `${username} Story #${finalId}.mp4`;
-            await downloadAndMoveStory(username, src, filename);
-            return {
-                success: true,
-                message: 'Successfully Downloaded Story from ' + username,
-            }
+        finalId++;
+        if (videoElement == null || videoElement == undefined || videoElement.src == undefined || videoElement.src == null) {
+            console.log('It seems that the user ' + username + ' dont have any storys yet!');
+            return noStoryOBJ;
+        }
+        var src = videoElement.src.replace('https', 'http');
+        var filename = `${username} Story #${finalId}.mp4`;
+        await downloadAndMoveStory(username, src, filename);
+        return {
+            success: true,
+            message: 'Successfully Downloaded Story from ' + username,
         }
     });
 }
@@ -212,7 +210,6 @@ async function getVideoElementsStory(username, userID) {
             try {
                 var reels_media = json.data.reels_media;
                 reels_media[0].items.forEach(element => {
-
                     if (element.video_resources) {
                         elements.push(element.video_resources[1]);
                     }
