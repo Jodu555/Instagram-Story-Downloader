@@ -163,6 +163,7 @@ async function getReelItems(userid, max_id, paging) {
 //////////////////////// IG Storys ////////////////////////////
 //////////////////////////////////////////////////////////////
 
+//TODO: FIrst thoughts after every video skip one elem cause this is just a pic of the prev video! But needs more tests
 exports.donwloadStory = async (username) => {
     fm.createUserStoryDirectory(username);
     const userID = await this.getUserID(username);
