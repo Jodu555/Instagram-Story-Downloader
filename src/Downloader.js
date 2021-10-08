@@ -163,8 +163,6 @@ async function getReelItems(userid, max_id, paging) {
 //////////////////////// IG Storys ////////////////////////////
 //////////////////////////////////////////////////////////////
 
-//TODO: FIrst thoughts after every video skip one elem cause this is just a pic of the prev video! But needs more tests
-// => Thats definitly it!
 exports.donwloadStory = async (username) => {
     fm.createUserStoryDirectory(username);
     const userID = await this.getUserID(username);
@@ -174,16 +172,22 @@ exports.donwloadStory = async (username) => {
         return noStoryOBJ;
     }
     var id = 0;
-    finalId = 0;
+    var skip = false;
     elements.forEach(async (videoElement) => {
+        if (skip) {
+            skip = false;
+            return;
+        }
+        skip = false;
         id++;
-        finalId++;
         if (videoElement == null || videoElement == undefined || videoElement.src == undefined || videoElement.src == null) {
             console.log('It seems that the user ' + username + ' dont have any storys yet!');
             return noStoryOBJ;
         }
-        var src = videoElement.src.replace('https', 'http');
-        var filename = `${username} Story #${finalId}.mp4`;
+        if (videoElement.mime_type && videoElement.mime_type.includes('video/'))
+            skip = true;
+        const src = videoElement.src.replace('https', 'http');
+        const filename = `${username} Story #${id}.mp4`;
         await downloadAndMoveStory(username, src, filename);
         return {
             success: true,
