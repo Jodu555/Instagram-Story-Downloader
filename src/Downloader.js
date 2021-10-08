@@ -164,6 +164,7 @@ async function getReelItems(userid, max_id, paging) {
 //////////////////////////////////////////////////////////////
 
 //TODO: FIrst thoughts after every video skip one elem cause this is just a pic of the prev video! But needs more tests
+// => Thats definitly it!
 exports.donwloadStory = async (username) => {
     fm.createUserStoryDirectory(username);
     const userID = await this.getUserID(username);
