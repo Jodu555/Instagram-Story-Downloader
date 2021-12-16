@@ -1,4 +1,6 @@
+const dotenv = require('dotenv').config();
 const fetch = require('node-fetch');
+
 
 
 async function test(params) {
@@ -6,7 +8,6 @@ async function test(params) {
         "headers": {
             "accept": "*/*",
             "accept-language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
-            "content-type": "application/x-www-form-urlencoded",
             "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
             "sec-ch-ua-mobile": "?0",
             "sec-fetch-dest": "empty",
@@ -20,14 +21,21 @@ async function test(params) {
         "method": "GET"
     });
 
-    // console.log(response);
     const json = await response.json();
-    console.log();
 
+
+    const content = [];
     json.reels_media[0].items.forEach(item => {
-        console.log(item.video_versions);
-        console.log(item.image_versions2);
+        delete item.url;
+        delete item.video_dash_manifest;
+        if (item.video_versions) {
+            console.log(item.video_versions[0]);
+        } else {
+            content.push(item.image_versions2.candidates[0]);
+        }
     });
+
+    // console.log(content);
 
 }
 
