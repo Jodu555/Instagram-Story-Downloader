@@ -217,15 +217,16 @@ async function getVideoElementsStory(username, userID) {
     });
 
     const json = await response.json();
-    json.reels_media[0].items.forEach(item => {
-        delete item.url;
-        delete item.video_dash_manifest;
-        if (item.video_versions) {
-            elements.push(item.video_versions[0]);
-        } else {
-            elements.push(item.image_versions2.candidates[0]);
-        }
-    });
+    if (json.reels_media[0]?.items)
+        json.reels_media[0].items.forEach(item => {
+            delete item.url;
+            delete item.video_dash_manifest;
+            if (item.video_versions) {
+                elements.push(item.video_versions[0]);
+            } else {
+                elements.push(item.image_versions2.candidates[0]);
+            }
+        });
 
     return elements
 }
