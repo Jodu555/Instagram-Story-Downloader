@@ -180,13 +180,13 @@ exports.donwloadStory = async (username) => {
         }
         skip = false;
         id++;
-        if (videoElement == null || videoElement == undefined || videoElement.src == undefined || videoElement.src == null) {
+        if (videoElement == null || videoElement == undefined || videoElement.url == undefined || videoElement.url == null) {
             console.log('It seems that the user ' + username + ' dont have any storys yet!');
             return noStoryOBJ;
         }
         if (videoElement.mime_type && videoElement.mime_type.includes('video/'))
             skip = true;
-        const src = videoElement.src.replace('https', 'http');
+        const src = videoElement.url.replace('https', 'http');
         const filename = `${username} Story #${id}.mp4`;
         await downloadAndMoveStory(username, src, filename);
         return {
@@ -210,27 +210,9 @@ async function downloadAndMoveStory(username, src, filename) {
 
 async function getVideoElementsStory(username, userID) {
     const elements = [];
-    // await fetch(`https://www.instagram.com/graphql/query/?query_hash=de8017ee0a7c9c45ec4260733d81ea31&variables=%7B%22reel_ids%22%3A%5B%22${userID}%22%5D%2C%22tag_names%22%3A%5B%5D%2C%22location_ids%22%3A%5B%5D%2C%22highlight_reel_ids%22%3A%5B%5D%2C%22precomposed_overlay%22%3Afalse%2C%22show_story_viewer_list%22%3Atrue%2C%22story_viewer_fetch_count%22%3A50%2C%22story_viewer_cursor%22%3A%22%22%7D`, opts)
-    //     .then(res => res.json())
-    //     .then(json => {
-    //         try {
-    //             var reels_media = json.data.reels_media;
-    //             reels_media[0].items.forEach(element => {
-    //                 if (element.video_resources) {
-    //                     elements.push(element.video_resources[1]);
-    //                 }
 
-    //                 if (element.display_resources) {
-    //                     elements.push(element.display_resources[1]);
-    //                 }
-    //             });
-    //         } catch (error) {
-    //             return null;
-    //         }
-    //     });
-
-    const response = await fetch("https://i.instagram.com/api/v1/feed/reels_media/?reel_ids=1088089078", {
-        "headers": headers,
+    const response = await fetch("https://i.instagram.com/api/v1/feed/reels_media/?reel_ids=" + userID, {
+        "headers": opts.headers,
         "method": "GET"
     });
 
@@ -244,6 +226,7 @@ async function getVideoElementsStory(username, userID) {
             elements.push(item.image_versions2.candidates[0]);
         }
     });
+
     return elements
 }
 
