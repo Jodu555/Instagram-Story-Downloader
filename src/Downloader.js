@@ -209,25 +209,41 @@ async function downloadAndMoveStory(username, src, filename) {
 }
 
 async function getVideoElementsStory(username, userID) {
-    var elements = [];
-    await fetch(`https://www.instagram.com/graphql/query/?query_hash=de8017ee0a7c9c45ec4260733d81ea31&variables=%7B%22reel_ids%22%3A%5B%22${userID}%22%5D%2C%22tag_names%22%3A%5B%5D%2C%22location_ids%22%3A%5B%5D%2C%22highlight_reel_ids%22%3A%5B%5D%2C%22precomposed_overlay%22%3Afalse%2C%22show_story_viewer_list%22%3Atrue%2C%22story_viewer_fetch_count%22%3A50%2C%22story_viewer_cursor%22%3A%22%22%7D`, opts)
-        .then(res => res.json())
-        .then(json => {
-            try {
-                var reels_media = json.data.reels_media;
-                reels_media[0].items.forEach(element => {
-                    if (element.video_resources) {
-                        elements.push(element.video_resources[1]);
-                    }
+    const elements = [];
+    // await fetch(`https://www.instagram.com/graphql/query/?query_hash=de8017ee0a7c9c45ec4260733d81ea31&variables=%7B%22reel_ids%22%3A%5B%22${userID}%22%5D%2C%22tag_names%22%3A%5B%5D%2C%22location_ids%22%3A%5B%5D%2C%22highlight_reel_ids%22%3A%5B%5D%2C%22precomposed_overlay%22%3Afalse%2C%22show_story_viewer_list%22%3Atrue%2C%22story_viewer_fetch_count%22%3A50%2C%22story_viewer_cursor%22%3A%22%22%7D`, opts)
+    //     .then(res => res.json())
+    //     .then(json => {
+    //         try {
+    //             var reels_media = json.data.reels_media;
+    //             reels_media[0].items.forEach(element => {
+    //                 if (element.video_resources) {
+    //                     elements.push(element.video_resources[1]);
+    //                 }
 
-                    if (element.display_resources) {
-                        elements.push(element.display_resources[1]);
-                    }
-                });
-            } catch (error) {
-                return null;
-            }
-        });
+    //                 if (element.display_resources) {
+    //                     elements.push(element.display_resources[1]);
+    //                 }
+    //             });
+    //         } catch (error) {
+    //             return null;
+    //         }
+    //     });
+
+    const response = await fetch("https://i.instagram.com/api/v1/feed/reels_media/?reel_ids=1088089078", {
+        "headers": headers,
+        "method": "GET"
+    });
+
+    const json = await response.json();
+    json.reels_media[0].items.forEach(item => {
+        delete item.url;
+        delete item.video_dash_manifest;
+        if (item.video_versions) {
+            elements.push(item.video_versions[0]);
+        } else {
+            elements.push(item.image_versions2.candidates[0]);
+        }
+    });
     return elements
 }
 
