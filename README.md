@@ -27,3 +27,5 @@ A Fully Configurable Instagram Downloader! To Download Instagram Storys from eve
   - [ ] Commands:
     - [ ] download : Downloads the story from a username
     - [ ] info : info prints informations
+- [ ] Implement an ffmpeg video copresser to download every story and compress them into one Video
+- [ ] Figure out some way to visualize the previous downloaded infos
